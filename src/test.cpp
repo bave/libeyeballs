@@ -35,9 +35,9 @@ main(int argc, char** argv)
     printf("fd_IPversion4:%d\n", eye.get_fd4());
     printf("fd_IPversion6:%d\n", eye.get_fd6());
     printf("returned_fd  :%d\n", fd);
-    printf("*returned number is -1, connection error.\n");
-    printf("*returned number is 0, connection timeout.\n");
-    printf("*returned number is number, connected socket fd.\n");
+    printf("* returned number is -1, connection error.\n");
+    printf("* returned number is 0, connection timeout.\n");
+    printf("* returned number is number, connected socket fd.\n");
     sleep(2);
 
     return 0;

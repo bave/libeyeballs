@@ -195,6 +195,7 @@ bool eyeballs::_cpy_addrinfo(struct addrinfo* ai)
 {
     if (ai->ai_family == AF_INET) {
 
+        if (in4) { return false; }
         if (la4.family) { return false; }
         la4.flags = ai->ai_flags;
         la4.family = ai->ai_family;
@@ -210,6 +211,7 @@ bool eyeballs::_cpy_addrinfo(struct addrinfo* ai)
 
     } else if (ai->ai_family == AF_INET6) {
 
+        if (in6) { return false; }
         if (la6.family) { return false; }
         la6.flags = ai->ai_flags;
         la6.family = ai->ai_family;
