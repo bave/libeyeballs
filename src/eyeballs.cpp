@@ -67,6 +67,7 @@ eyeballs::stream_create(const std::string& host, const std::string& port)
         error = ioctl(fd4, FIONBIO, &on);
         if (error == -1) {
             EYEBALLS_PERROR("ioctl");
+            close(fd4);
             return -1;
         }
     }
@@ -85,6 +86,7 @@ eyeballs::stream_create(const std::string& host, const std::string& port)
         error = ioctl(fd6, FIONBIO, &on);
         if (error == -1) {
             EYEBALLS_PERROR("ioctl");
+            close(fd6);
             return -1;
         }
     }
