@@ -7,12 +7,17 @@
 #include <sys/errno.h>
 
 #include <netinet/in.h>
+
 #ifdef __linux__
-#include <arpa/nameser.h>
 #include <linux/socket.h>
-#else
-#include <nameser.h>
 #endif
+
+#ifdef __APPLE__
+#include <nameser.h>
+#else
+#include <arpa/nameser.h>
+#endif
+
 #include <resolv.h>
 
 #include <err.h>
