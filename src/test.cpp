@@ -25,12 +25,19 @@ main(int argc, char** argv)
 
     class eyeballs eye;
 
-    eye.set_timeout(0, 0);
+    eye.set_timeout(3, 0);
     // sec:0, usec:0 -> sys/connect default timeout 
     // class eyeballs default is sec:0, usec:0
 
     int fd = eye.stream_create(argv[1], argv[2]);
     //int fd = eye.stream_create(std::string(argv[1]), std::string(argv[2]));
+    if (fd == -1) {
+        printf("cannt connect");
+        exit(EXIT_FAILURE);
+    } else if (fd == 0) {
+        printf("timeout\n");
+        exit(EXIT_FAILURE);
+    }
 
     printf("fd_IPversion4:%d\n", eye.get_fd4());
     printf("fd_IPversion6:%d\n", eye.get_fd6());

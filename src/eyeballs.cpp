@@ -44,6 +44,7 @@ eyeballs::stream_create(const std::string& host, const std::string& port)
     int on  = 1;
     int off = 0;
     int error;
+    socklen_t len = sizeof(error);
 
     struct addrinfo *res;
     struct addrinfo *res0;
@@ -147,6 +148,8 @@ eyeballs::stream_create(const std::string& host, const std::string& port)
         EYEBALLS_PERROR("select");
         close(fd4);
         close(fd6);
+        fd4 = -1;
+        fd6 = -1;
         return -1;
 
     } else if (error == 0) {
@@ -154,35 +157,37 @@ eyeballs::stream_create(const std::string& host, const std::string& port)
         // timeout is return 0
         close(fd4);
         close(fd6);
+        fd4 = -1;
+        fd6 = -1;
         return 0;
 
     } else {
 
-        /*
-        socklen_t len = sizeof(error);
-        if (getsockopt(fd4, SOL_SOCKET, SO_ERROR, &error, &len) < 0) {
-            printf("getsockopt error");
-        }
-        if (getsockopt(fd6 SOL_SOCKET, SO_ERROR, &error, &len) < 0) {
-            printf("getsockopt error");
-        }
-        */
-
         if (FD_ISSET(fd6, &e_fds)) {
+            if (getsockopt(fd6, SOL_SOCKET, SO_ERROR, &error, &len) < 0) {
+                EYEBALLS_PERROR("getsockopt");
+            }
             close(fd6);
             fd6 = -1;
-        } else if(FD_ISSET(fd4, &e_fds)) {
+        }
+
+        if(FD_ISSET(fd4, &e_fds)) {
+            if (getsockopt(fd4, SOL_SOCKET, SO_ERROR, &error, &len) < 0) {
+                EYEBALLS_PERROR("getsockopt");
+            }
             close(fd4);
             fd4 = -1;
         }
 
         if (in6 && fd6 != -1) {
             if (FD_ISSET(fd6, &r_fds) || FD_ISSET(fd6, &w_fds)) {
-                if (in4) {
+                if (in4 && fd4 != -1) {
                     if (setsockopt(fd4, SOL_SOCKET, SO_LINGER, (struct linger*)&linger, sizeof(linger)) < 0) {
                         EYEBALLS_PERROR("setsockopt");
                         close(fd4);
                         close(fd6);
+                        fd4 = -1;
+                        fd6 = -1;
                         return -1;
                     } 
                 }
@@ -191,20 +196,25 @@ eyeballs::stream_create(const std::string& host, const std::string& port)
                     EYEBALLS_PERROR("ioctl");
                     close(fd4);
                     close(fd6);
+                    fd4 = -1;
+                    fd6 = -1;
                     return -1;
                 }
                 close(fd4);
+                fd4 = -1;
                 return fd6;
             }
         }
 
         if (in4 && fd4 != -1) {
             if (FD_ISSET(fd4, &r_fds) || FD_ISSET(fd4, &w_fds)) {
-                if (in6) {
+                if (in6 && fd6 != -1) {
                     if (setsockopt(fd6, SOL_SOCKET, SO_LINGER, (struct linger*)&linger, sizeof(linger)) < 0) {
                         EYEBALLS_PERROR("setsockopt");
                         close(fd4);
                         close(fd6);
+                        fd4 = -1;
+                        fd6 = -1;
                         return -1;
                     }
                 }
@@ -213,9 +223,12 @@ eyeballs::stream_create(const std::string& host, const std::string& port)
                     EYEBALLS_PERROR("ioctl");
                     close(fd4);
                     close(fd6);
+                    fd4 = -1;
+                    fd6 = -1;
                     return -1;
                 }
                 close(fd6);
+                fd6 = -1;
                 return fd4;
             }
         }

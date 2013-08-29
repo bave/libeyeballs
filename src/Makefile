@@ -11,12 +11,10 @@ libeyeballs: eyeballs.cpp eyeballs.hpp
 test: test.cpp
 	g++ -g -Wall -o test test.cpp -L./ -leyeballs
 
-
 else
 ifeq ($(UNAME),Linux)
 
 all: test
-	echo $(uname)
 
 test: test.cpp
 	g++ -g -Wall -o test test.cpp eyeballs.cpp
