@@ -8,7 +8,7 @@ happy eyeballs(RFC6555) library for C++
 
 # git clone https://github.com/bave/libeyeballs.git
 # cd libeyeballs
-# make
+# gmake
 # ./test
 
 after run make command, libeyeballs.{dylib, so} created.

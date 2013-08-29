@@ -163,20 +163,24 @@ eyeballs::stream_create(const std::string& host, const std::string& port)
 
     } else {
 
-        if (FD_ISSET(fd6, &e_fds)) {
-            if (getsockopt(fd6, SOL_SOCKET, SO_ERROR, &error, &len) < 0) {
-                EYEBALLS_PERROR("getsockopt");
+        if (in6) {
+            if (FD_ISSET(fd6, &e_fds)) {
+                if (getsockopt(fd6, SOL_SOCKET, SO_ERROR, &error, &len) < 0) {
+                    EYEBALLS_PERROR("getsockopt");
+                }
+                close(fd6);
+                fd6 = -1;
             }
-            close(fd6);
-            fd6 = -1;
         }
 
-        if(FD_ISSET(fd4, &e_fds)) {
-            if (getsockopt(fd4, SOL_SOCKET, SO_ERROR, &error, &len) < 0) {
-                EYEBALLS_PERROR("getsockopt");
+        if (in4) {
+            if(FD_ISSET(fd4, &e_fds)) {
+                if (getsockopt(fd4, SOL_SOCKET, SO_ERROR, &error, &len) < 0) {
+                    EYEBALLS_PERROR("getsockopt");
+                }
+                close(fd4);
+                fd4 = -1;
             }
-            close(fd4);
-            fd4 = -1;
         }
 
         if (in6 && fd6 != -1) {
