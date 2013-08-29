@@ -52,7 +52,11 @@ eyeballs::stream_create(const std::string& host, const std::string& port)
     memset(&hints, 0, sizeof(hints));
     hints.ai_family = AF_UNSPEC;
     hints.ai_socktype = SOCK_STREAM;
+#ifdef __FreeBSD__
+    hints.ai_flags = 0;
+#else
     hints.ai_flags = AI_ALL|AI_ADDRCONFIG;
+#endif
 
     error = getaddrinfo(host.c_str(), port.c_str(), &hints, &res0);
     if (error) {
