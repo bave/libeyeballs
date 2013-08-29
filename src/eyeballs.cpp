@@ -124,17 +124,13 @@ eyeballs::stream_create(const std::string& host, const std::string& port)
         FD_SET(fd6, &r_fds);
         FD_SET(fd6, &w_fds);
         FD_SET(fd6, &e_fds);
-        error = connect(fd6, (struct sockaddr*)&(la6.addr), la6.addrlen);
-        perror("in6 connect");
-        printf("in6 connect errrno: %d\n", error);
+        connect(fd6, (struct sockaddr*)&(la6.addr), la6.addrlen);
     }
     if (in4) {
         FD_SET(fd4, &r_fds);
         FD_SET(fd4, &w_fds);
         FD_SET(fd4, &e_fds);
-        error = connect(fd4, (struct sockaddr*)&(la4.addr), la4.addrlen);
-        perror("in4 connect");
-        printf("in4 connect errrno: %d\n", error);
+        connect(fd4, (struct sockaddr*)&(la4.addr), la4.addrlen);
     }
 
 
@@ -162,13 +158,25 @@ eyeballs::stream_create(const std::string& host, const std::string& port)
 
     } else {
 
+        /*
+        socklen_t len = sizeof(error);
+        if (getsockopt(fd4, SOL_SOCKET, SO_ERROR, &error, &len) < 0) {
+            printf("getsockopt error");
+        }
+        if (getsockopt(fd6 SOL_SOCKET, SO_ERROR, &error, &len) < 0) {
+            printf("getsockopt error");
+        }
+        */
+
         if (FD_ISSET(fd6, &e_fds)) {
             close(fd6);
+            fd6 = -1;
         } else if(FD_ISSET(fd4, &e_fds)) {
             close(fd4);
+            fd4 = -1;
         }
 
-        if (in6) {
+        if (in6 && fd6 != -1) {
             if (FD_ISSET(fd6, &r_fds) || FD_ISSET(fd6, &w_fds)) {
                 if (in4) {
                     if (setsockopt(fd4, SOL_SOCKET, SO_LINGER, (struct linger*)&linger, sizeof(linger)) < 0) {
@@ -190,7 +198,7 @@ eyeballs::stream_create(const std::string& host, const std::string& port)
             }
         }
 
-        if (in4) {
+        if (in4 && fd4 != -1) {
             if (FD_ISSET(fd4, &r_fds) || FD_ISSET(fd4, &w_fds)) {
                 if (in6) {
                     if (setsockopt(fd6, SOL_SOCKET, SO_LINGER, (struct linger*)&linger, sizeof(linger)) < 0) {
