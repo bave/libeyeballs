@@ -91,7 +91,6 @@ eyeballs::stream_create(const std::string& host, const std::string& port)
         }
     }
 
-
     int max;
     fd_set r_fds;
     fd_set w_fds;
@@ -103,7 +102,6 @@ eyeballs::stream_create(const std::string& host, const std::string& port)
     } else {
         max = fd6;
     }
-
 
     if (in6) {
         FD_SET(fd6, &r_fds);

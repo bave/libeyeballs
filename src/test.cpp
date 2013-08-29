@@ -38,7 +38,27 @@ main(int argc, char** argv)
     printf("* returned number is -1, connection error.\n");
     printf("* returned number is 0, connection timeout.\n");
     printf("* returned number is number, connected socket fd.\n");
-    sleep(2);
+
+    ssize_t size;
+    size = send(fd, "HEAD / HTTP/1.1\n\n", strlen("HEAD / HTTP/1.0\n\n"), 0);
+    if (size < 0) {
+        perror("send");
+        exit(EXIT_FAILURE);
+    } 
+    char buf[BUFSIZ];
+    memset(buf, 0, sizeof(buf));
+    size = recv(fd, buf, sizeof(buf), 0);
+    if (size < 0) {
+        perror("send");
+        exit(EXIT_FAILURE);
+    } else if (size == 0) {
+        printf("closed by peer host.\n");
+        close(fd);
+        exit(EXIT_SUCCESS);
+    }
+    printf("\n%s\n", buf);
+    close(fd);
+    sleep(10);
 
     return 0;
 }
