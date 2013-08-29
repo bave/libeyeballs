@@ -21,8 +21,11 @@ test: test.cpp
 
 else
 
-all:
-	echo $(uname)
+all: test
+
+test: test.cpp
+	g++ -g -Wall -o test test.cpp eyeballs.cpp
+
 
 endif
 endif
