@@ -41,7 +41,7 @@ extern bool eyeballs_debug;
 #define EYEBALLS_PERROR(func) do {} while (false)
 #endif
 
-class eyeballs{
+class eyeballs {
 
     struct local_addrinfo {
         int flags;
@@ -54,20 +54,8 @@ class eyeballs{
     };
 
 public:
-    eyeballs() {
-        fd4 = -1;
-        fd6 = -1;
-        in4 = false;
-        in6 = false;
-        memset(&la4, 0, sizeof(la4));
-        memset(&la6, 0, sizeof(la6));
-        memset(&timeout, 0, sizeof(timeout));
-        linger.l_onoff = 1;
-        linger.l_linger = 0;
-    };
-
-    virtual ~eyeballs() {
-    };
+    eyeballs();
+    virtual ~eyeballs();
 
     int get_fd4();
     int get_fd6();
@@ -83,7 +71,6 @@ private:
     int fd4;
     int fd6;
     struct timeval timeout;
-
     bool in4;
     bool in6;
     struct local_addrinfo la4;

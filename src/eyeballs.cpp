@@ -2,6 +2,21 @@
 
 bool eyeballs_debug;
 
+eyeballs::eyeballs() {
+    fd4 = -1;
+    fd6 = -1;
+    in4 = false;
+    in6 = false;
+    memset(&la4, 0, sizeof(la4));
+    memset(&la6, 0, sizeof(la6));
+    memset(&timeout, 0, sizeof(timeout));
+    linger.l_onoff = 1;
+    linger.l_linger = 0;
+}
+
+eyeballs::~eyeballs() {
+}
+
 // if cloud not open fd4, return -1.
 int
 eyeballs::get_fd4()
@@ -94,8 +109,10 @@ eyeballs::stream_create(const std::string& host, const std::string& port)
     int max;
     fd_set r_fds;
     fd_set w_fds;
+    fd_set e_fds;
     FD_ZERO(&r_fds);
     FD_ZERO(&w_fds);
+    FD_ZERO(&e_fds);
 
     if (fd4 > fd6) {
         max = fd4;
@@ -106,19 +123,25 @@ eyeballs::stream_create(const std::string& host, const std::string& port)
     if (in6) {
         FD_SET(fd6, &r_fds);
         FD_SET(fd6, &w_fds);
-        connect(fd6, (struct sockaddr*)&(la6.addr), la6.addrlen);
+        FD_SET(fd6, &e_fds);
+        error = connect(fd6, (struct sockaddr*)&(la6.addr), la6.addrlen);
+        perror("in6 connect");
+        printf("in6 connect errrno: %d\n", error);
     }
     if (in4) {
         FD_SET(fd4, &r_fds);
         FD_SET(fd4, &w_fds);
-        connect(fd4, (struct sockaddr*)&(la4.addr), la4.addrlen);
+        FD_SET(fd4, &e_fds);
+        error = connect(fd4, (struct sockaddr*)&(la4.addr), la4.addrlen);
+        perror("in4 connect");
+        printf("in4 connect errrno: %d\n", error);
     }
 
 
     if (timeout.tv_sec == 0 && timeout.tv_usec == 0) {
-        error = select(max+1, &r_fds, &w_fds, NULL, NULL);
+        error = select(max+1, &r_fds, &w_fds, &e_fds, NULL);
     } else {
-        error = select(max+1, &r_fds, &w_fds, NULL, &timeout);
+        error = select(max+1, &r_fds, &w_fds, &e_fds, &timeout);
     }
 
 
@@ -138,6 +161,12 @@ eyeballs::stream_create(const std::string& host, const std::string& port)
         return 0;
 
     } else {
+
+        if (FD_ISSET(fd6, &e_fds)) {
+            close(fd6);
+        } else if(FD_ISSET(fd4, &e_fds)) {
+            close(fd4);
+        }
 
         if (in6) {
             if (FD_ISSET(fd6, &r_fds) || FD_ISSET(fd6, &w_fds)) {
@@ -187,7 +216,6 @@ eyeballs::stream_create(const std::string& host, const std::string& port)
 
     return -1;
 }
-
 
 bool eyeballs::_cpy_addrinfo(struct addrinfo* ai)
 {

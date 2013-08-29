@@ -58,7 +58,6 @@ main(int argc, char** argv)
     }
     printf("\n%s\n", buf);
     close(fd);
-    sleep(10);
 
     return 0;
 }
