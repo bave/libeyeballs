@@ -15,8 +15,11 @@ test: test.cpp
 else
 ifeq ($(UNAME),Linux)
 
-all:
+all: test
 	echo $(uname)
+
+test: test.cpp
+	g++ -g -Wall -o test test.cpp eyeballs.cpp
 
 else
 
