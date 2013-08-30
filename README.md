@@ -10,6 +10,7 @@ happy eyeballs(RFC6555) library for C++
 # cd libeyeballs
 # make
 # make install (if your platform is Linux)
+# cd src
 # ./test
 
 ```
