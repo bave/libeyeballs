@@ -32,7 +32,7 @@ main(int argc, char** argv)
     int fd = eye.stream_create(argv[1], argv[2]);
     //int fd = eye.stream_create(std::string(argv[1]), std::string(argv[2]));
     if (fd == -1) {
-        printf("cannt connect");
+        printf("cannt connect\n");
         exit(EXIT_FAILURE);
     } else if (fd == 0) {
         printf("timeout\n");

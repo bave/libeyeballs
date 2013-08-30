@@ -1,8 +1,6 @@
 #include "eyeballs.hpp"
 
-#ifdef DEBUG
 bool eyeballs_debug;
-#endif
 
 eyeballs::eyeballs() {
     fd4 = -1;

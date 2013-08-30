@@ -1,34 +1,13 @@
 
 UNAME := $(shell uname -s)
 
-ifeq ($(UNAME),Darwin)
+all: libeyeballs
 
-all: libeyeballs test
+libeyeballs: eyeballs.cpp eyeballs.hpp test.cpp
+	/bin/sh ./create.sh libeyeballs
 
-libeyeballs: eyeballs.cpp eyeballs.hpp
-	g++ -O3 -Wall -shared eyeballs.cpp -o libeyeballs.dylib
-
-test: test.cpp
-	g++ -g -Wall -o test test.cpp -L./ -leyeballs
-
-else
-ifeq ($(UNAME),Linux)
-
-all: test
-
-test: test.cpp
-	g++ -g -Wall -o test test.cpp eyeballs.cpp
-
-else
-
-all: test
-
-test: test.cpp
-	g++ -g -Wall -o test test.cpp eyeballs.cpp
-
-
-endif
-endif
+debug: eyeballs.cpp eyeballs.hpp test.cpp
+	/bin/sh ./create.sh debug
 
 clean:
 	rm -rf *.dSYM libeyeballs.* test

@@ -31,9 +31,9 @@
 
 #include <iostream>
 
+extern bool eyeballs_debug;
 
 #ifdef DEBUG
-extern bool eyeballs_debug;
 #define EYEBALLS_PERROR(func) do {                              \
     if (eyeballs_debug) {                                       \
     char s[BUFSIZ];                                             \
