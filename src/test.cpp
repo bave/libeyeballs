@@ -25,7 +25,7 @@ main(int argc, char** argv)
 
     class eyeballs eye;
 
-    eye.set_timeout(3, 0);
+    eye.set_timeout(0, 0);
     // sec:0, usec:0 -> sys/connect default timeout 
     // class eyeballs default is sec:0, usec:0
 
@@ -39,19 +39,26 @@ main(int argc, char** argv)
         exit(EXIT_FAILURE);
     }
 
-    printf("fd_IPversion4:%d\n", eye.get_fd4());
-    printf("fd_IPversion6:%d\n", eye.get_fd6());
-    printf("returned_fd  :%d\n", fd);
-    printf("* returned number is -1, connection error.\n");
-    printf("* returned number is 0, connection timeout.\n");
-    printf("* returned number is number, connected socket fd.\n");
+    printf("returned_fd :%d", fd);
+    if (eye.isfd4()) {
+        printf(" (IPv4)\n");
+    } else if (eye.isfd6()) {
+        printf(" (IPv6)\n");
+    } else {
+        printf("(hoge)\n");
+    }
+    printf("- returned number is -1, connection error.\n");
+    printf("- returned number is 0, connection timeout.\n");
+    printf("- returned number is number, connected socket fd.\n");
 
     ssize_t size;
-    size = send(fd, "HEAD / HTTP/1.1\n\n", strlen("HEAD / HTTP/1.0\n\n"), 0);
+    const char* msg = "HEAD / HTTP/1.0\n\n";
+    size = send(fd, msg, strlen(msg), 0);
     if (size < 0) {
         perror("send");
         exit(EXIT_FAILURE);
     } 
+
     char buf[BUFSIZ];
     memset(buf, 0, sizeof(buf));
     size = recv(fd, buf, sizeof(buf), 0);

@@ -17,18 +17,24 @@ eyeballs::eyeballs() {
 eyeballs::~eyeballs() {
 }
 
-// if cloud not open fd4, return -1.
-int
-eyeballs::get_fd4()
+bool
+eyeballs::isfd4()
 {
-    return fd4;
+    if (fd4 == -1) {
+        return false;
+    } else {
+        return true;
+    }
 }
 
-// if cloud not open fd6, return -1.
-int
-eyeballs::get_fd6()
+bool
+eyeballs::isfd6()
 {
-    return fd6;
+    if (fd6 == -1) {
+        return false;
+    } else {
+        return true;
+    }
 }
 
 int

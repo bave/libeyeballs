@@ -62,8 +62,8 @@ public:
     eyeballs();
     virtual ~eyeballs();
 
-    int get_fd4();
-    int get_fd6();
+    bool isfd4();
+    bool isfd6();
     int stream_create(const char* host, const char* port);
     int stream_create(const std::string& host, const std::string& port);
     void set_timeout(int sec, int usec);
