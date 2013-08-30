@@ -22,7 +22,7 @@ if [ ${OSNAME} = 'Darwin' ]; then
     elif [ ${TERGET} = 'install' ]; then
 
         echo 'pleas run following command'
-        echo 'cp ./libeyeballs.hpp /usr/local/include/'
+        echo 'cp ./eyeballs.hpp /usr/local/include/'
         echo 'cp ./libeyeballs.so  /usr/local/lib/'
 
     elif [ ${TERGET} = 'deinstall' ]; then
@@ -51,14 +51,14 @@ elif [ ${OSNAME} = 'Linux' ]; then
 
     elif [ ${TERGET} = 'install' ]; then
 
-        cp ./libeyeballs.hpp /usr/local/include/
+        cp ./eyeballs.hpp /usr/local/include/
         cp ./libeyeballs.so  /usr/local/lib/
         nice ldconfig
         echo 'install complete.'
 
     elif [ ${TERGET} = 'deinstall' ]; then
 
-        rm -f /usr/local/include/libeyeballs.hpp
+        rm -f /usr/local/include/eyeballs.hpp
         rm -f /usr/local/lib/libeyeballs.so
         nice ldconfig
         echo 'deinstall complete.'
