@@ -21,15 +21,19 @@ if [ ${OSNAME} = 'Darwin' ]; then
 
     elif [ ${TERGET} = 'install' ]; then
 
-        echo 'pleas run following command'
-        echo 'cp ./eyeballs.hpp /usr/local/include/'
-        echo 'cp ./libeyeballs.so  /usr/local/lib/'
+        echo 'cp ./eyeballs.hpp /usr/include/'
+        echo 'cp ./libeyeballs.dylib  /usr/lib/'
+        eval 'cp ./eyeballs.hpp /usr/include/'
+        eval 'cp ./libeyeballs.dylib  /usr/lib/'
+        echo 'install complete.'
 
     elif [ ${TERGET} = 'deinstall' ]; then
 
-        echo 'pleas run following command'
-        echo 'rm -f /usr/local/include/libeyeballs.hpp'
-        echo 'rm -f /usr/local/lib/libeyeballs.so'
+        echo 'rm -f /usr/include/libeyeballs.hpp'
+        echo 'rm -f /usr/lib/libeyeballs.dylib'
+        eval 'rm -f /usr/include/libeyeballs.hpp'
+        eval 'rm -f /usr/lib/libeyeballs.dylib'
+        echo 'deinstall complete.'
 
     fi
 
@@ -51,16 +55,22 @@ elif [ ${OSNAME} = 'Linux' ]; then
 
     elif [ ${TERGET} = 'install' ]; then
 
-        cp ./eyeballs.hpp /usr/local/include/
-        cp ./libeyeballs.so  /usr/local/lib/
-        nice ldconfig
+        echo 'cp ./eyeballs.hpp /usr/local/include/'
+        echo 'cp ./libeyeballs.so  /usr/local/lib/'
+        echo 'nice ldconfig'
+        eval 'cp ./eyeballs.hpp /usr/local/include/'
+        eval 'cp ./libeyeballs.so  /usr/local/lib/'
+        eval 'nice ldconfig'
         echo 'install complete.'
 
     elif [ ${TERGET} = 'deinstall' ]; then
 
-        rm -f /usr/local/include/eyeballs.hpp
-        rm -f /usr/local/lib/libeyeballs.so
-        nice ldconfig
+        echo 'rm -f /usr/local/include/eyeballs.hpp'
+        echo 'rm -f /usr/local/lib/libeyeballs.so'
+        echo 'nice ldconfig'
+        eval 'rm -f /usr/local/include/eyeballs.hpp'
+        eval 'rm -f /usr/local/lib/libeyeballs.so'
+        eval 'nice ldconfig'
         echo 'deinstall complete.'
 
     fi
